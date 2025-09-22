@@ -1,4 +1,4 @@
-use std::{collections::HashSet};
+use std::collections::HashSet;
 
 use crate::{app::Application, cli::commands::Command};
 use clap::Parser;
@@ -13,7 +13,7 @@ pub fn run(app: &Application) {
         Command::Add { note, tags, ttl } => {
             let mut validated_tags = tags.unwrap_or_default();
             validated_tags.dedup();
-            app.note_service.add_note(&note, &validated_tags, ttl);
+            app.notes_service.add_note(&note, &validated_tags, ttl);
         }
         Command::List {
             included_tags,
@@ -28,14 +28,13 @@ pub fn run(app: &Application) {
                 return;
             }
 
-            // let included_list: Vec<_> = included.iter().cloned().collect();
             let included_list: Vec<_> = included.iter().cloned().collect();
             let excluded_list: Vec<_> = excluded.iter().cloned().collect();
 
-            app.note_service.notes(&included_list, &excluded_list);
+            app.notes_service.notes(&included_list, &excluded_list);
         }
-        Command::Delete { id } => app.note_service.delete_note(&id),
-        Command::Get { id } => app.note_service.get_note(&id),
+        Command::Delete { id } => app.notes_service.delete_note(&id),
+        Command::Get { id } => app.notes_service.get_note(&id),
     }
 }
 
